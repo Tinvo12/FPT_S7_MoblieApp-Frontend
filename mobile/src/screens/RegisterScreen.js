@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator, ScrollView } from 'react-native';
+import { View, StyleSheet, Alert, ScrollView } from 'react-native';
+import AppText from '../components/AppText';
+import AppButton from '../components/AppButton';
+import AppInput from '../components/AppInput';
+import { COLORS, SPACING } from '../constants/theme';
 
 export default function RegisterScreen({ navigation }) {
     const [name, setName] = useState('');
@@ -34,58 +38,49 @@ export default function RegisterScreen({ navigation }) {
 
     return (
         <ScrollView contentContainerStyle={styles.scrollContainer} style={styles.container}>
-            <Text style={styles.title}>Đăng Ký Tài Khoản</Text>
+            <AppText variant="h1" weight="bold" style={styles.title}>Đăng Ký Tài Khoản</AppText>
 
-            <TextInput
-                style={styles.input}
+            <AppInput
                 placeholder="Họ và Tên"
-                placeholderTextColor="#888"
                 value={name}
                 onChangeText={setName}
             />
-            <TextInput
-                style={styles.input}
+            <AppInput
                 placeholder="Địa chỉ Email"
-                placeholderTextColor="#888"
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
                 autoCapitalize="none"
             />
-            <TextInput
-                style={styles.input}
+            <AppInput
                 placeholder="Mật khẩu"
-                placeholderTextColor="#888"
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
             />
-            <TextInput
-                style={styles.input}
+            <AppInput
                 placeholder="Xác nhận mật khẩu"
-                placeholderTextColor="#888"
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
                 secureTextEntry
             />
 
-            <TouchableOpacity
-                style={styles.button}
+            <AppButton
+                title="Tạo Tài Khoản"
                 onPress={handleRegister}
                 disabled={loading}
-            >
-                {loading ? (
-                    <ActivityIndicator color="#ffffff" />
-                ) : (
-                    <Text style={styles.buttonText}>Tạo Tài Khoản</Text>
-                )}
-            </TouchableOpacity>
+                loading={loading}
+                style={styles.button}
+            />
 
             <View style={styles.loginContainer}>
-                <Text style={styles.loginText}>Đã có tài khoản? </Text>
-                <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                    <Text style={styles.loginLink}>Đăng nhập ngay</Text>
-                </TouchableOpacity>
+                <AppText color={COLORS.textSecondary}>Đã có tài khoản? </AppText>
+                <AppButton 
+                    title="Đăng nhập ngay" 
+                    variant="ghost" 
+                    onPress={() => navigation.navigate('Login')} 
+                    style={styles.loginLink}
+                />
             </View>
         </ScrollView>
     );
@@ -94,59 +89,29 @@ export default function RegisterScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#121212',
+        backgroundColor: COLORS.background,
     },
     scrollContainer: {
         flexGrow: 1,
         justifyContent: 'center',
-        padding: 24,
+        padding: SPACING.l,
     },
     title: {
-        fontSize: 28,
-        color: '#ffffff',
-        fontWeight: 'bold',
-        marginBottom: 40,
+        marginBottom: SPACING.xxl,
         textAlign: 'center',
-    },
-    input: {
-        backgroundColor: '#1e1e1e',
-        color: '#ffffff',
-        borderRadius: 8,
-        padding: 16,
-        marginBottom: 16,
-        fontSize: 16,
-        borderWidth: 1,
-        borderColor: '#333'
+        color: COLORS.white,
     },
     button: {
-        backgroundColor: '#000080',
-        borderRadius: 8,
-        padding: 16,
-        alignItems: 'center',
-        marginTop: 20,
-        shadowColor: '#000080',
-        shadowOpacity: 0.5,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 10,
-        elevation: 5
-    },
-    buttonText: {
-        color: '#ffffff',
-        fontSize: 16,
-        fontWeight: '600',
+        marginTop: SPACING.m,
     },
     loginContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
-        marginTop: 30,
-    },
-    loginText: {
-        color: '#888',
-        fontSize: 16,
+        alignItems: 'center',
+        marginTop: SPACING.xl,
     },
     loginLink: {
-        color: '#000080', // Custom brand color MCHud 
-        fontSize: 16,
-        fontWeight: 'bold',
+        paddingHorizontal: 0,
+        paddingVertical: 0
     }
 });

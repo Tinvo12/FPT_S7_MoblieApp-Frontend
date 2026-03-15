@@ -1,6 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { logout } from '../api/authService';
+import AppText from '../components/AppText';
+import AppButton from '../components/AppButton';
+import { COLORS, SPACING, RADIUS } from '../constants/theme';
 
 export default function SettingsScreen({ navigation }) {
 
@@ -13,21 +16,24 @@ export default function SettingsScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Cài Đặt Hệ Thống</Text>
+            <AppText variant="h2" weight="bold" style={styles.title}>Cài Đặt Hệ Thống</AppText>
 
             <TouchableOpacity style={styles.listItem}>
-                <Text style={styles.listText}>Chi tiết hồ sơ Profile (MC Public Profile)</Text>
+                <AppText style={styles.listText}>Chi tiết hồ sơ Profile (MC Public Profile)</AppText>
             </TouchableOpacity>
             <TouchableOpacity style={styles.listItem}>
-                <Text style={styles.listText}>Cấu hình bảo mật</Text>
+                <AppText style={styles.listText}>Cấu hình bảo mật</AppText>
             </TouchableOpacity>
             <TouchableOpacity style={styles.listItem}>
-                <Text style={styles.listText}>Thông báo (Notification Center)</Text>
+                <AppText style={styles.listText}>Thông báo (Notification Center)</AppText>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-                <Text style={styles.logoutText}>Đăng Xuất</Text>
-            </TouchableOpacity>
+            <AppButton 
+                title="Đăng Xuất" 
+                variant="danger" 
+                onPress={handleLogout} 
+                style={styles.logoutButton} 
+            />
         </View>
     );
 }
@@ -35,40 +41,25 @@ export default function SettingsScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#121212',
-        padding: 24,
+        backgroundColor: COLORS.background,
+        padding: SPACING.l,
     },
     title: {
-        fontSize: 22,
-        color: '#ffffff',
-        fontWeight: 'bold',
-        marginBottom: 24,
+        marginBottom: SPACING.l,
     },
     listItem: {
-        backgroundColor: '#1e1e1e',
-        padding: 18,
-        borderRadius: 8, // ROUND_EIGHT
-        marginBottom: 16,
+        backgroundColor: COLORS.surface,
+        padding: SPACING.m,
+        borderRadius: RADIUS.medium,
+        marginBottom: SPACING.m,
         borderWidth: 1,
-        borderColor: '#333'
+        borderColor: COLORS.border
     },
     listText: {
-        color: '#ffffff',
-        fontSize: 16,
         fontWeight: '500'
     },
     logoutButton: {
-        padding: 16,
-        alignItems: 'center',
         marginTop: 'auto',
-        borderWidth: 1.5,
-        borderColor: '#ff4444',
-        borderRadius: 8,
-        marginBottom: 20
-    },
-    logoutText: {
-        color: '#ff4444',
-        fontWeight: 'bold',
-        fontSize: 16,
-    },
+        marginBottom: SPACING.m
+    }
 });

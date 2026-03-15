@@ -1,5 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, ScrollView, Image } from 'react-native';
+import AppText from '../components/AppText';
+import AppButton from '../components/AppButton';
+import { COLORS, SPACING, RADIUS } from '../constants/theme';
 
 export default function MCPublicProfileScreen() {
     return (
@@ -7,22 +10,24 @@ export default function MCPublicProfileScreen() {
             {/* Mocking avatar base */}
             <View style={styles.avatarPlaceholder} />
 
-            <Text style={styles.mcName}>Phạm Quang Minh</Text>
-            <Text style={styles.mcTitle}>MC Sự Kiện / Người Dẫn Chương Trình Truyền Hình</Text>
+            <AppText variant="h1" weight="bold" style={styles.mcName}>Phạm Quang Minh</AppText>
+            <AppText variant="body" color={COLORS.textMuted} style={styles.mcTitle}>MC Sự Kiện / Người Dẫn Chương Trình Truyền Hình</AppText>
 
-            <TouchableOpacity style={styles.bookBtn}>
-                <Text style={styles.btnText}>BOOK NOW</Text>
-            </TouchableOpacity>
+            <AppButton 
+                title="BOOK NOW" 
+                onPress={() => {}} 
+                style={styles.bookBtn} 
+            />
 
             <View style={styles.infoSection}>
-                <Text style={styles.sectionTitle}>Giới Thiệu</Text>
-                <Text style={styles.sectionContent}>Hơn 5 năm kinh nghiệm dẫn các chương trình giải trí và hội nghị cấp cao. Phong cách chững chạc, humor.</Text>
+                <AppText variant="h3" weight="bold" style={styles.sectionTitle}>Giới Thiệu</AppText>
+                <AppText color={COLORS.textSecondary} style={styles.sectionContent}>Hơn 5 năm kinh nghiệm dẫn các chương trình giải trí và hội nghị cấp cao. Phong cách chững chạc, humor.</AppText>
             </View>
 
             <View style={styles.infoSection}>
-                <Text style={styles.sectionTitle}>Chuyên Môn</Text>
-                <Text style={styles.badge}>Hội nghị</Text>
-                <Text style={styles.badge}>Lễ hội âm nhạc</Text>
+                <AppText variant="h3" weight="bold" style={styles.sectionTitle}>Chuyên Môn</AppText>
+                <AppText style={styles.badge}>Hội nghị</AppText>
+                <AppText style={styles.badge}>Lễ hội âm nhạc</AppText>
             </View>
         </ScrollView>
     );
@@ -31,69 +36,50 @@ export default function MCPublicProfileScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#121212',
-        padding: 24,
+        backgroundColor: COLORS.background,
+        padding: SPACING.l,
     },
     avatarPlaceholder: {
         width: 120,
         height: 120,
         borderRadius: 60,
-        backgroundColor: '#000080',
+        backgroundColor: COLORS.brand,
         alignSelf: 'center',
-        marginBottom: 20,
-        marginTop: 20
+        marginBottom: SPACING.m,
+        marginTop: SPACING.m
     },
     mcName: {
-        fontSize: 26,
-        color: '#ffffff',
-        fontWeight: 'bold',
         textAlign: 'center',
-        marginBottom: 5,
+        marginBottom: SPACING.xs,
     },
     mcTitle: {
-        color: '#888',
         textAlign: 'center',
-        fontSize: 14,
-        marginBottom: 20
+        marginBottom: SPACING.m
     },
     bookBtn: {
-        backgroundColor: '#000080',
-        padding: 15,
-        borderRadius: 8,
-        alignItems: 'center',
-        marginBottom: 30
-    },
-    btnText: {
-        color: '#fff',
-        fontWeight: 'bold',
-        fontSize: 16
+        marginBottom: SPACING.xl
     },
     infoSection: {
-        backgroundColor: '#1e1e1e',
-        padding: 20,
-        borderRadius: 8,
-        marginBottom: 15
+        backgroundColor: COLORS.surface,
+        padding: SPACING.m,
+        borderRadius: RADIUS.medium,
+        marginBottom: SPACING.m
     },
     sectionTitle: {
-        color: '#ffffff',
-        fontWeight: 'bold',
-        fontSize: 18,
-        marginBottom: 10,
+        marginBottom: SPACING.s,
     },
     sectionContent: {
-        color: '#ccc',
-        fontSize: 14,
         lineHeight: 22
     },
     badge: {
-        color: '#000080',
-        backgroundColor: '#fff',
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-        borderRadius: 15,
+        color: COLORS.brand,
+        backgroundColor: COLORS.white,
+        paddingHorizontal: SPACING.s,
+        paddingVertical: SPACING.xs,
+        borderRadius: RADIUS.pill,
         alignSelf: 'flex-start',
         overflow: 'hidden',
-        marginBottom: 5,
+        marginBottom: SPACING.xs,
         fontWeight: 'bold',
         fontSize: 12
     }

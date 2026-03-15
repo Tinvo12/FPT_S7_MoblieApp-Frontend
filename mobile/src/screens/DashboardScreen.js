@@ -1,44 +1,88 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useContext } from 'react';
+import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import AppText from '../components/AppText';
+import AppButton from '../components/AppButton';
+import { COLORS, SPACING, RADIUS } from '../constants/theme';
+import { AuthContext } from '../context/AuthContext';
+import { ROLES } from '../constants/roles';
 
 export default function DashboardScreen({ navigation }) {
+    const { userData } = useContext(AuthContext);
+    const isMC = userData?.role === ROLES.MC || userData?.role === 'mc';
+
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.welcomeText}>Xin chào, MC!</Text>
-            <Text style={styles.subtitle}>Tổng quan hoạt động và Booking</Text>
-
-            <View style={styles.card}>
-                <Text style={styles.cardTitle}>Upcoming Events (Sự kiện sắp tới)</Text>
-                <Text style={styles.cardContent}>Bạn có 2 sự kiện đang chờ trên hệ thống MCHud.</Text>
+            <View style={styles.header}>
+                <AppText variant="h1" weight="bold" style={styles.welcomeText}>
+                    Xin chào, {userData?.name || (isMC ? 'MC' : 'Người dùng')}!
+                </AppText>
+                <AppText variant="body" color={COLORS.textSecondary} style={styles.subtitle}>
+                    {isMC ? 'Quản lý lịch diễn và thù lao của bạn' : 'Tìm kiếm và đặt lịch MC cho sự kiện'}
+                </AppText>
             </View>
 
-            <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('EarningsWallet')}>
-                <Text style={styles.buttonText}>Thu nhập & Ví</Text>
-            </TouchableOpacity>
+            {isMC ? (
+                // MC DASHBOARD VIEW
+                <>
+                    <View style={styles.card}>
+                        <AppText variant="h3" weight="bold" style={styles.cardTitle}>Sự kiện sắp tới</AppText>
+                        <AppText variant="body" color={COLORS.textMuted}>Bạn có 2 lịch hẹn đang chờ trong tuần này.</AppText>
+                    </View>
 
-            <Text style={styles.navSection}>Chức Năng Nhanh</Text>
+                    <AppButton 
+                        title="Lịch Sự Kiện Của Tôi" 
+                        onPress={() => navigation.navigate('MyBookings')} 
+                        style={styles.navButton}
+                    />
 
-            <View style={styles.grid}>
-                <TouchableOpacity style={styles.gridItem} onPress={() => navigation.navigate('ClientDiscovery')}>
-                    <Text style={styles.gridText}>Tìm Kiếm KH</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.gridItem} onPress={() => navigation.navigate('ScriptLibrary')}>
-                    <Text style={styles.gridText}>Thư Viện KB</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.gridItem} onPress={() => navigation.navigate('Messaging')}>
-                    <Text style={styles.gridText}>Tin Nhắn</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.gridItem} onPress={() => navigation.navigate('MCPublicProfile')}>
-                    <Text style={styles.gridText}>Hồ Sơ Của Tôi</Text>
-                </TouchableOpacity>
-            </View>
+                    <AppButton 
+                        title="Ví & Thu Nhập" 
+                        onPress={() => navigation.navigate('EarningsWallet')} 
+                        style={styles.navButton}
+                    />
 
-            <TouchableOpacity
+                    <AppText variant="h3" weight="bold" style={styles.navSection}>Công cụ MC</AppText>
+                    <View style={styles.grid}>
+                        <AppButton title="Tìm Sự Kiện" variant="secondary" onPress={() => navigation.navigate('ClientDiscovery')} style={styles.gridItem} />
+                        <AppButton title="Thư Viện KB" variant="secondary" onPress={() => navigation.navigate('ScriptLibrary')} style={styles.gridItem} />
+                        <AppButton title="Tin Nhắn" variant="secondary" onPress={() => navigation.navigate('Messaging')} style={styles.gridItem} />
+                        <AppButton title="Hồ Sơ" variant="secondary" onPress={() => navigation.navigate('MCPublicProfile')} style={styles.gridItem} />
+                    </View>
+                </>
+            ) : (
+                // CLIENT DASHBOARD VIEW
+                <>
+                    <AppButton 
+                        title="Khám Phá MC Ngay" 
+                        onPress={() => navigation.navigate('MCDiscovery')} 
+                        style={styles.mainActionButton}
+                    />
+
+                    <View style={styles.card}>
+                        <AppText variant="h3" weight="bold" style={styles.cardTitle}>Trạng thái đặt lịch</AppText>
+                        <AppText variant="body" color={COLORS.textMuted}>Theo dõi các yêu cầu đặt MC của bạn.</AppText>
+                    </View>
+
+                    <AppButton 
+                        title="Lịch Đặt Của Tôi" 
+                        variant="secondary"
+                        onPress={() => navigation.navigate('MyBookings')} 
+                        style={styles.navButton}
+                    />
+
+                    <View style={styles.grid}>
+                        <AppButton title="Tin Nhắn" variant="secondary" onPress={() => navigation.navigate('Messaging')} style={styles.gridItem} />
+                        <AppButton title="Thông Báo" variant="secondary" onPress={() => navigation.navigate('Notification')} style={styles.gridItem} />
+                    </View>
+                </>
+            )}
+
+            <AppButton 
+                title="Cài Đặt & Tài Khoản" 
+                variant="outline"
+                onPress={() => navigation.navigate('Settings')} 
                 style={styles.settingsButton}
-                onPress={() => navigation.navigate('Settings')}
-            >
-                <Text style={styles.buttonText}>Cài Đặt & Xác Thực</Text>
-            </TouchableOpacity>
+            />
         </ScrollView>
     );
 }
@@ -46,86 +90,52 @@ export default function DashboardScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#121212',
-        padding: 24,
+        backgroundColor: COLORS.background,
+        padding: SPACING.l,
+    },
+    header: {
+        marginBottom: SPACING.xl,
     },
     welcomeText: {
-        fontSize: 26,
-        color: '#ffffff',
-        fontWeight: 'bold',
-        marginBottom: 8,
+        marginBottom: SPACING.xs,
     },
     subtitle: {
-        color: '#a0a0a0',
-        fontSize: 16,
-        marginBottom: 32,
+        marginBottom: SPACING.s,
     },
     card: {
-        backgroundColor: '#1e1e1e',
-        borderRadius: 8, // ROUND_EIGHT
-        padding: 20,
-        marginBottom: 20,
+        backgroundColor: COLORS.surface,
+        borderRadius: RADIUS.medium,
+        padding: SPACING.m,
+        marginBottom: SPACING.m,
         borderLeftWidth: 4,
-        borderLeftColor: '#000080'
+        borderLeftColor: COLORS.brand
     },
     cardTitle: {
-        color: '#ffffff',
-        fontWeight: 'bold',
-        fontSize: 18,
-        marginBottom: 8,
-    },
-    cardContent: {
-        color: '#888',
-        fontSize: 14,
-        lineHeight: 20
+        marginBottom: SPACING.s,
     },
     navSection: {
-        color: '#fff',
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginTop: 20,
-        marginBottom: 15
+        marginTop: SPACING.m,
+        marginBottom: SPACING.m
     },
     grid: {
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-between',
-        marginBottom: 20
+        marginBottom: SPACING.m
     },
     gridItem: {
-        backgroundColor: '#1e1e1e',
         width: '48%',
-        padding: 20,
-        borderRadius: 8,
-        marginBottom: 15,
-        alignItems: 'center',
-        borderWidth: 1,
-        borderColor: '#333'
-    },
-    gridText: {
-        color: '#fff',
-        fontWeight: '600'
+        marginBottom: SPACING.m,
     },
     navButton: {
-        backgroundColor: '#000080',
-        borderRadius: 8,
-        padding: 16,
-        alignItems: 'center',
-        marginBottom: 20
+        marginBottom: SPACING.m
+    },
+    mainActionButton: {
+        marginBottom: SPACING.xl,
+        paddingVertical: SPACING.l,
     },
     settingsButton: {
-        backgroundColor: '#1e1e1e',
-        borderRadius: 8,
-        padding: 16,
-        alignItems: 'center',
-        marginTop: 20,
+        marginTop: SPACING.m,
         marginBottom: 50,
-        borderWidth: 1,
-        borderColor: '#000080'
-    },
-    buttonText: {
-        color: '#ffffff',
-        fontWeight: '600',
-        fontSize: 16
-    },
+    }
 });

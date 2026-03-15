@@ -1,29 +1,35 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
+import AppText from '../components/AppText';
+import AppButton from '../components/AppButton';
+import AppInput from '../components/AppInput';
+import { COLORS, SPACING } from '../constants/theme';
 
 export default function MCOnboardingScreen({ navigation }) {
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.title}>Trở Thành MC Chuyên Nghiệp</Text>
+            <AppText variant="h1" weight="bold" style={styles.title}>Trở Thành MC Chuyên Nghiệp</AppText>
 
-            <View style={styles.section}>
-                <Text style={styles.label}>Tên Nghệ Danh (Stage Name)</Text>
-                <TextInput style={styles.input} placeholderTextColor="#888" placeholder="Nhập nghệ danh..." />
-            </View>
+            <AppInput 
+                label="Tên Nghệ Danh (Stage Name)" 
+                placeholder="Nhập nghệ danh..." 
+            />
 
-            <View style={styles.section}>
-                <Text style={styles.label}>Chuyên Môn Của Bạn (Event Types)</Text>
-                <TextInput style={styles.input} placeholderTextColor="#888" placeholder="VD: Hội nghị, Đám cưới..." />
-            </View>
+            <AppInput 
+                label="Chuyên Môn Của Bạn (Event Types)" 
+                placeholder="VD: Hội nghị, Đám cưới..." 
+            />
 
-            <View style={styles.section}>
-                <Text style={styles.label}>Video Demo (Link YouTube)</Text>
-                <TextInput style={styles.input} placeholderTextColor="#888" placeholder="https://youtube.com/..." />
-            </View>
+            <AppInput 
+                label="Video Demo (Link YouTube)" 
+                placeholder="https://youtube.com/..." 
+            />
 
-            <TouchableOpacity style={styles.submitBtn} onPress={() => navigation.navigate('Dashboard')}>
-                <Text style={styles.submitText}>Hoàn Tất Hồ Sơ</Text>
-            </TouchableOpacity>
+            <AppButton 
+                title="Hoàn Tất Hồ Sơ" 
+                onPress={() => navigation.navigate('Dashboard')} 
+                style={styles.submitBtn} 
+            />
         </ScrollView>
     );
 }
@@ -31,43 +37,14 @@ export default function MCOnboardingScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#121212',
-        padding: 24,
+        backgroundColor: COLORS.background,
+        padding: SPACING.l,
     },
     title: {
-        fontSize: 24,
-        color: '#ffffff',
-        fontWeight: 'bold',
-        marginBottom: 30,
+        marginBottom: SPACING.xl,
         textAlign: 'center'
     },
-    section: {
-        marginBottom: 20
-    },
-    label: {
-        color: '#fff',
-        fontSize: 16,
-        marginBottom: 8,
-        fontWeight: 'bold'
-    },
-    input: {
-        backgroundColor: '#1e1e1e',
-        padding: 15,
-        borderRadius: 8,
-        color: '#fff',
-        borderWidth: 1,
-        borderColor: '#333'
-    },
     submitBtn: {
-        backgroundColor: '#000080',
-        padding: 16,
-        borderRadius: 8,
-        alignItems: 'center',
-        marginTop: 20
-    },
-    submitText: {
-        color: '#fff',
-        fontSize: 16,
-        fontWeight: 'bold'
+        marginTop: SPACING.m
     }
 });

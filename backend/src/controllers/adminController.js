@@ -1,9 +1,8 @@
-const User = require('../models/User');
-const Booking = require('../models/Booking');
+const adminService = require('../services/adminService');
 
 exports.getAllUsers = async (req, res) => {
     try {
-        const users = await User.find();
+        const users = await adminService.findAllUsers();
         res.status(200).json({ status: 'success', results: users.length, data: { users } });
     } catch (err) {
         res.status(400).json({ status: 'fail', message: err.message });
@@ -12,20 +11,17 @@ exports.getAllUsers = async (req, res) => {
 
 exports.updateUserStatus = async (req, res) => {
     try {
-        const { isActive, isVerified } = req.body;
-        const user = await User.findByIdAndUpdate(req.params.id, { isActive, isVerified }, { new: true });
-
-        if (!user) return res.status(404).json({ status: 'fail', message: 'User not found' });
-
+        const user = await adminService.updateUserStatus(req.params.id, req.body);
         res.status(200).json({ status: 'success', data: { user } });
     } catch (err) {
-        res.status(400).json({ status: 'fail', message: err.message });
+        const statusCode = err.statusCode || 400;
+        res.status(statusCode).json({ status: 'fail', message: err.message });
     }
 };
 
 exports.getAllBookings = async (req, res) => {
     try {
-        const bookings = await Booking.find().populate('mc').populate('client');
+        const bookings = await adminService.findAllBookings();
         res.status(200).json({ status: 'success', results: bookings.length, data: { bookings } });
     } catch (err) {
         res.status(400).json({ status: 'fail', message: err.message });

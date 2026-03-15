@@ -1,27 +1,75 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, StyleSheet, ScrollView, Alert } from 'react-native';
+import AppText from '../components/AppText';
+import AppButton from '../components/AppButton';
+import { COLORS, SPACING, RADIUS } from '../constants/theme';
+import { createPayment } from '../api/paymentService';
+import { AuthContext } from '../context/AuthContext';
 
-export default function BookingCheckoutScreen({ navigation }) {
+export default function BookingCheckoutScreen({ navigation, route }) {
+    const { userData } = useContext(AuthContext);
+    const [loading, setLoading] = useState(false);
+
+    // Dữ liệu giả định hoặc lấy từ route params
+    const bookingDetails = route.params?.booking || {
+        id: 'bk_123',
+        mcName: 'Trần Văn A',
+        eventName: 'Hội Thảo Y Khoa Cấp Cao',
+        date: '25/08/2026',
+        amount: 20000000,
+        fee: 1000000
+    };
+
+    const handlePayment = async () => {
+        setLoading(true);
+        try {
+            const paymentData = {
+                booking: bookingDetails.id,
+                client: userData?.id,
+                mc: bookingDetails.mcId || 'mc_001',
+                amount: bookingDetails.amount + bookingDetails.fee,
+                status: 'Completed', // Giả định thanh toán thành công ngay
+                type: 'Escrow'
+            };
+
+            await createPayment(paymentData);
+            
+            Alert.alert('Thành công', 'Thanh toán thành công. Tiền đã được ký quỹ an toàn.');
+            navigation.navigate('Success');
+        } catch (error) {
+            console.error(error);
+            Alert.alert('Lỗi', 'Không thể thực hiện thanh toán. Vui lòng thử lại.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.title}>Checkout & Escrow</Text>
+            <AppText variant="h2" weight="bold" style={styles.title}>Checkout & Escrow</AppText>
 
             <View style={styles.card}>
-                <Text style={styles.cardTitle}>Thông Tin Đặt MC</Text>
-                <Text style={styles.rowText}>- Tên MC: Trần Văn A</Text>
-                <Text style={styles.rowText}>- Sự Kiện: Hội Thảo Y Khoa Cấp Cao</Text>
-                <Text style={styles.rowText}>- Ngày: 25/08/2026</Text>
+                <AppText variant="h3" weight="bold" style={styles.cardTitle}>Thông Tin Đặt MC</AppText>
+                <AppText style={styles.rowText} color={COLORS.textSecondary}>- Tên MC: {bookingDetails.mcName}</AppText>
+                <AppText style={styles.rowText} color={COLORS.textSecondary}>- Sự Kiện: {bookingDetails.eventName}</AppText>
+                <AppText style={styles.rowText} color={COLORS.textSecondary}>- Ngày: {bookingDetails.date}</AppText>
             </View>
             <View style={styles.card}>
-                <Text style={styles.cardTitle}>Chi Tiết Thanh Toán (Escrow)</Text>
-                <Text style={styles.rowText}>Phí MC: 20,000,000 VNĐ</Text>
-                <Text style={styles.rowText}>Phí Nền Tảng: 1,000,000 VNĐ</Text>
-                <Text style={[styles.rowText, styles.totalText]}>Tổng Cộng: 21,000,000 VNĐ</Text>
+                <AppText variant="h3" weight="bold" style={styles.cardTitle}>Chi Tiết Thanh Toán (Escrow)</AppText>
+                <AppText style={styles.rowText} color={COLORS.textSecondary}>Phí MC: {bookingDetails.amount.toLocaleString()} VNĐ</AppText>
+                <AppText style={styles.rowText} color={COLORS.textSecondary}>Phí Nền Tảng: {bookingDetails.fee.toLocaleString()} VNĐ</AppText>
+                <AppText weight="bold" color={COLORS.success} style={[styles.rowText, styles.totalText]}>
+                    Tổng Cộng: {(bookingDetails.amount + bookingDetails.fee).toLocaleString()} VNĐ
+                </AppText>
             </View>
 
-            <TouchableOpacity style={styles.payBtn} onPress={() => navigation.navigate('Success')}>
-                <Text style={styles.payBtnText}>Thanh Toán An Toàn Qua MCHud (Giữ Tiền)</Text>
-            </TouchableOpacity>
+            <AppButton 
+                title="Thanh Toán An Toàn Qua MCHud (Giữ Tiền)" 
+                onPress={handlePayment} 
+                loading={loading}
+                disabled={loading}
+                style={styles.payBtn} 
+            />
         </ScrollView>
     );
 }
@@ -29,53 +77,33 @@ export default function BookingCheckoutScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#121212',
-        padding: 24,
+        backgroundColor: COLORS.background,
+        padding: SPACING.l,
     },
     title: {
-        fontSize: 24,
-        color: '#ffffff',
-        fontWeight: 'bold',
-        marginBottom: 20,
+        marginBottom: SPACING.m,
     },
     card: {
-        backgroundColor: '#1e1e1e',
-        borderRadius: 8,
-        padding: 20,
-        marginBottom: 20,
+        backgroundColor: COLORS.surface,
+        borderRadius: RADIUS.medium,
+        padding: SPACING.m,
+        marginBottom: SPACING.m,
         borderLeftWidth: 4,
-        borderLeftColor: '#000080'
+        borderLeftColor: COLORS.brand
     },
     cardTitle: {
-        color: '#ffffff',
-        fontWeight: 'bold',
-        fontSize: 18,
-        marginBottom: 15,
+        marginBottom: SPACING.m,
     },
     rowText: {
-        color: '#ccc',
-        fontSize: 16,
-        marginBottom: 8,
+        marginBottom: SPACING.s,
     },
     totalText: {
-        color: '#00e676',
-        fontWeight: 'bold',
-        fontSize: 18,
-        marginTop: 10,
+        marginTop: SPACING.s,
         borderTopWidth: 1,
-        borderTopColor: '#333',
-        paddingTop: 10
+        borderTopColor: COLORS.border,
+        paddingTop: SPACING.s
     },
     payBtn: {
-        backgroundColor: '#000080',
-        padding: 16,
-        borderRadius: 8,
-        alignItems: 'center',
-        marginTop: 20
-    },
-    payBtnText: {
-        color: '#fff',
-        fontWeight: 'bold',
-        fontSize: 16
+        marginTop: SPACING.m
     }
 });

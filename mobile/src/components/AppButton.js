@@ -12,8 +12,9 @@ export default function AppButton({
     style
 }) {
     const getBackgroundColor = () => {
-        if (disabled) return COLORS.border;
-        if (variant === 'secondary') return COLORS.surfaceHighlight;
+        if (disabled) return COLORS.divider; // A darker disabled state
+        if (variant === 'secondary') return COLORS.transparent;
+        if (variant === 'ghost') return COLORS.transparent;
         if (variant === 'danger') return COLORS.danger;
         if (variant === 'outline') return COLORS.transparent;
         return COLORS.brand;
@@ -21,6 +22,8 @@ export default function AppButton({
 
     const getTextColor = () => {
         if (disabled) return COLORS.textMuted;
+        if (variant === 'secondary') return COLORS.white;
+        if (variant === 'ghost') return COLORS.brandLight;
         if (variant === 'outline') return COLORS.brand;
         return COLORS.white;
     };
@@ -34,6 +37,8 @@ export default function AppButton({
                 styles.button,
                 { backgroundColor: getBackgroundColor() },
                 variant === 'outline' && styles.outline,
+                variant === 'secondary' && { borderWidth: 1, borderColor: COLORS.surface },
+                variant === 'ghost' && { paddingHorizontal: SPACING.m }, // Ghost usually has less padding
                 variant === 'primary' && !disabled && SHADOWS.glow,
                 style
             ]}

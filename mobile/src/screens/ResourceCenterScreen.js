@@ -1,18 +1,20 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
+import AppText from '../components/AppText';
+import { COLORS, SPACING, RADIUS } from '../constants/theme';
 
 export default function ResourceCenterScreen() {
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.title}>Trung tâm hỗ trợ</Text>
+            <AppText variant="h2" weight="bold" style={styles.title}>Trung tâm hỗ trợ</AppText>
 
             <View style={styles.card}>
-                <Text style={styles.cardTitle}>Hướng dẫn sử dụng App</Text>
-                <Text style={styles.cardContent}>Tìm hiểu cách để đăng bài profile hoàn hảo, và tối ưu hóa lượt booking.</Text>
+                <AppText variant="h3" weight="bold" style={styles.cardTitle}>Hướng dẫn sử dụng App</AppText>
+                <AppText variant="body" color={COLORS.textMuted} style={styles.cardContent}>Tìm hiểu cách để đăng bài profile hoàn hảo, và tối ưu hóa lượt booking.</AppText>
             </View>
             <View style={styles.card}>
-                <Text style={styles.cardTitle}>Chính sách Thanh Toán & Nạp Rút</Text>
-                <Text style={styles.cardContent}>Tham khảo biểu phí và quy định về thu nhập của MC.</Text>
+                <AppText variant="h3" weight="bold" style={styles.cardTitle}>Chính sách Thanh Toán & Nạp Rút</AppText>
+                <AppText variant="body" color={COLORS.textMuted} style={styles.cardContent}>Tham khảo biểu phí và quy định về thu nhập của MC.</AppText>
             </View>
         </ScrollView>
     );
@@ -21,32 +23,24 @@ export default function ResourceCenterScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#121212',
-        padding: 24,
+        backgroundColor: COLORS.background,
+        padding: SPACING.l,
     },
     title: {
-        fontSize: 24,
-        color: '#ffffff',
-        fontWeight: 'bold',
-        marginBottom: 20,
+        marginBottom: SPACING.m,
     },
     card: {
-        backgroundColor: '#1e1e1e',
-        borderRadius: 8,
-        padding: 20,
-        marginBottom: 20,
+        backgroundColor: COLORS.surface,
+        borderRadius: RADIUS.medium,
+        padding: SPACING.m,
+        marginBottom: SPACING.m,
         borderLeftWidth: 4,
-        borderLeftColor: '#000080'
+        borderLeftColor: COLORS.brand
     },
     cardTitle: {
-        color: '#ffffff',
-        fontWeight: 'bold',
-        fontSize: 18,
-        marginBottom: 8,
+        marginBottom: SPACING.s,
     },
     cardContent: {
-        color: '#888',
-        fontSize: 14,
         lineHeight: 20
     },
 });

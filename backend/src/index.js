@@ -28,6 +28,7 @@ const bookingRoutes = require('./routes/bookingRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
+const chatRoutes = require('./routes/chatRoutes');
 
 // Set up routes
 app.use('/api/v1/auth', authRoutes);
@@ -36,6 +37,7 @@ app.use('/api/v1/bookings', bookingRoutes);
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/reviews', reviewRoutes);
 app.use('/api/v1/payments', paymentRoutes);
+app.use('/api/v1/chats', chatRoutes);
 
 
 // Database connection
@@ -55,6 +57,9 @@ app.get('/', (req, res) => {
     res.send('Welcome to Booking MC API (Web & React Native)');
 });
 
+// Import Chat Service for socket logic
+const chatService = require('./services/chatService');
+
 // Socket.io for Real-time Chat
 io.on('connection', (socket) => {
     console.log(`User connected: ${socket.id}`);
@@ -64,10 +69,16 @@ io.on('connection', (socket) => {
         console.log(`User joined chat room: ${bookingId}`);
     });
 
-    socket.on('send_message', (data) => {
-        // data should contain { bookingId, senderId, receiverId, content, attachments }
-        // Ideally save to Message model here via controller
-        io.to(data.bookingId).emit('receive_message', data);
+    socket.on('send_message', async (data) => {
+        try {
+            // data should contain { booking, sender, receiver, content, attachments }
+            const savedMessage = await chatService.saveMessage(data);
+            
+            // Broadcast to all users in the room
+            io.to(data.booking).emit('receive_message', savedMessage);
+        } catch (err) {
+            socket.emit('error', { message: 'Could not save message' });
+        }
     });
 
     socket.on('disconnect', () => {

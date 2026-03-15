@@ -12,7 +12,7 @@ import AppButton from '../../components/AppButton';
 import Avatar from '../../components/Avatar';
 import AppCard from '../../components/AppCard';
 
-export default function ProfileScreen() {
+export default function ProfileScreen({ navigation }) {
     const { userData, logout } = useAuth();
 
     const handleLogout = () => {
@@ -40,13 +40,23 @@ export default function ProfileScreen() {
                     <AppText variant="h2">{userData?.name}</AppText>
                     <AppText color={COLORS.textSecondary}>{userData?.email}</AppText>
                     <AppText variant="caption" color={COLORS.brand} weight="bold" style={{ marginTop: 8 }}>
-                        {userData?.role === 'MC' ? 'Tài Khoản MC' : (userData?.role === 'CUSTOMER' ? 'Khách Hàng' : 'Quản Trị Viên')}
+                        {userData?.role?.toUpperCase() === 'MC' ? 'Tài Khoản MC' : (userData?.role?.toUpperCase() === 'CUSTOMER' ? 'Khách Hàng' : 'Quản Trị Viên')}
                     </AppText>
                 </View>
 
                 <View style={styles.section}>
                     <AppText variant="subtitle" style={styles.sectionTitle}>Chung</AppText>
-                    <OptionRow icon={UserCircle} title="Sửa Hồ Sơ Của Tôi" />
+                    <OptionRow 
+                        icon={UserCircle} 
+                        title="Sửa Hồ Sơ Của Tôi" 
+                        onPress={() => {
+                            if (userData?.role?.toLowerCase() === 'mc') {
+                                navigation.navigate('EditMCProfile');
+                            } else {
+                                Alert.alert('Thông báo', 'Tính năng chỉnh sửa hồ sơ khách hàng đang được cập nhật.');
+                            }
+                        }}
+                    />
                     <OptionRow icon={CreditCard} title="Quản Lý Thanh Toán" />
                     <OptionRow icon={Settings} title="Cài Đặt Hệ Thống" />
                 </View>

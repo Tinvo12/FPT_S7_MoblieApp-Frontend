@@ -1,17 +1,9 @@
-const MCProfile = require('../models/MCProfile');
-const User = require('../models/User');
+const mcService = require('../services/mcService');
 
 exports.updateProfile = async (req, res) => {
     try {
-        const { user } = req; // Assuming auth middleware sets req.user
-        const mcData = req.body;
-
-        let profile = await MCProfile.findOneAndUpdate(
-            { user: user._id },
-            mcData,
-            { new: true, upsert: true }
-        );
-
+        const userId = req.user?._id || req.body.userId; // Assuming middleware or payload
+        const profile = await mcService.updateMCProfile(userId, req.body);
         res.status(200).json({ status: 'success', data: { profile } });
     } catch (err) {
         res.status(400).json({ status: 'fail', message: err.message });
@@ -20,24 +12,7 @@ exports.updateProfile = async (req, res) => {
 
 exports.getAllMCs = async (req, res) => {
     try {
-        // Basic search/filter functionality
-        const { search, region, style, eventType, sortPath, minPrice, maxPrice } = req.query;
-
-        let query = {};
-        if (region) query.regions = { $in: [region] };
-        if (style) query.styles = { $in: [style] };
-        if (eventType) query.eventTypes = { $in: [eventType] };
-        if (minPrice) query['rates.min'] = { $gte: minPrice };
-        if (maxPrice) query['rates.max'] = { $lte: maxPrice };
-
-        let profilesQuery = MCProfile.find(query).populate('user', 'name avatar');
-
-        if (sortPath) {
-            // example: sortPath = 'rating' or '-rating'
-            profilesQuery = profilesQuery.sort(sortPath);
-        }
-
-        const profiles = await profilesQuery;
+        const profiles = await mcService.findAllMCs(req.query);
         res.status(200).json({ status: 'success', results: profiles.length, data: { profiles } });
     } catch (err) {
         res.status(400).json({ status: 'fail', message: err.message });
@@ -46,11 +21,10 @@ exports.getAllMCs = async (req, res) => {
 
 exports.getMCDetails = async (req, res) => {
     try {
-        const profile = await MCProfile.findById(req.params.id).populate('user', 'name avatar');
-        if (!profile) return res.status(404).json({ status: 'fail', message: 'MC not found' });
-
+        const profile = await mcService.getMCProfileById(req.params.id);
         res.status(200).json({ status: 'success', data: { profile } });
     } catch (err) {
-        res.status(400).json({ status: 'fail', message: err.message });
+        const statusCode = err.statusCode || 400;
+        res.status(statusCode).json({ status: 'fail', message: err.message });
     }
 };

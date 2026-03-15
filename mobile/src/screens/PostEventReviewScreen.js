@@ -1,24 +1,29 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 'react-native';
+import { View, StyleSheet, ScrollView, TextInput } from 'react-native';
+import AppText from '../components/AppText';
+import AppButton from '../components/AppButton';
+import { COLORS, SPACING, RADIUS } from '../constants/theme';
 
 export default function PostEventReviewScreen() {
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.title}>Đánh Giá Sau Sự Kiện</Text>
+            <AppText variant="h2" weight="bold" style={styles.title}>Đánh Giá Sau Sự Kiện</AppText>
 
             <View style={styles.card}>
-                <Text style={styles.cardTitle}>Đánh giá MC Cát Tường - Sự kiện: Lễ Khai Trương 15/08</Text>
-                <Text style={styles.ratingText}>Chất lượng: ⭐⭐⭐⭐⭐</Text>
+                <AppText variant="h3" weight="bold" style={styles.cardTitle}>Đánh giá MC Cát Tường - Sự kiện: Lễ Khai Trương 15/08</AppText>
+                <AppText style={styles.ratingText}>Chất lượng: ⭐⭐⭐⭐⭐</AppText>
                 <TextInput
                     style={styles.reviewInput}
                     multiline
                     numberOfLines={4}
                     placeholder="Nhập nhận xét của bạn về MC..."
-                    placeholderTextColor="#888"
+                    placeholderTextColor={COLORS.textMuted}
                 />
-                <TouchableOpacity style={styles.submitBtn}>
-                    <Text style={styles.btnText}>Gửi Đánh Giá</Text>
-                </TouchableOpacity>
+                <AppButton 
+                    title="Gửi Đánh Giá" 
+                    onPress={() => {}} 
+                    style={styles.submitBtn} 
+                />
             </View>
         </ScrollView>
     );
@@ -27,53 +32,40 @@ export default function PostEventReviewScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#121212',
-        padding: 24,
+        backgroundColor: COLORS.background,
+        padding: SPACING.l,
     },
     title: {
-        fontSize: 24,
-        color: '#ffffff',
-        fontWeight: 'bold',
-        marginBottom: 20,
+        marginBottom: SPACING.m,
     },
     card: {
-        backgroundColor: '#1e1e1e',
-        borderRadius: 8,
-        padding: 20,
-        marginBottom: 20,
+        backgroundColor: COLORS.surface,
+        borderRadius: RADIUS.medium,
+        padding: SPACING.m,
+        marginBottom: SPACING.m,
         borderLeftWidth: 4,
-        borderLeftColor: '#000080'
+        borderLeftColor: COLORS.brand
     },
     cardTitle: {
-        color: '#ffffff',
-        fontWeight: 'bold',
-        fontSize: 18,
-        marginBottom: 8,
+        marginBottom: SPACING.s,
     },
     ratingText: {
-        color: '#ffcc00', // Màu vang sao đánh giá
+        color: COLORS.warning, // Màu vang sao đánh giá
         fontSize: 20,
-        marginBottom: 15
+        marginBottom: SPACING.m
     },
     reviewInput: {
-        backgroundColor: '#121212',
-        color: '#fff',
-        borderRadius: 8,
-        padding: 12,
+        backgroundColor: COLORS.background,
+        color: COLORS.white,
+        borderRadius: RADIUS.medium,
+        padding: SPACING.s,
         borderWidth: 1,
-        borderColor: '#333',
+        borderColor: COLORS.border,
         minHeight: 100,
         textAlignVertical: 'top',
-        marginBottom: 15
+        marginBottom: SPACING.m
     },
     submitBtn: {
-        backgroundColor: '#000080',
-        padding: 14,
-        borderRadius: 8,
         alignItems: 'center'
-    },
-    btnText: {
-        color: '#fff',
-        fontWeight: 'bold'
     }
 });

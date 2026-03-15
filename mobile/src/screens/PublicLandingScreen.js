@@ -1,23 +1,25 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
+import AppText from '../components/AppText';
+import AppButton from '../components/AppButton';
+import { COLORS, SPACING, RADIUS } from '../constants/theme';
 
 export default function PublicLandingScreen({ navigation }) {
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.title}>MCHud Landing Page</Text>
-            <Text style={styles.subtitle}>Chào mừng bạn đến với mạng lưới MC chuyên nghiệp</Text>
+            <AppText variant="h1" weight="bold" style={styles.title}>MCHud Landing Page</AppText>
+            <AppText variant="body" color={COLORS.textSecondary} style={styles.subtitle}>Chào mừng bạn đến với mạng lưới MC chuyên nghiệp</AppText>
 
             <View style={styles.card}>
-                <Text style={styles.cardTitle}>Giới thiệu</Text>
-                <Text style={styles.cardContent}>Khám phá các MC tài năng và đặt lịch chuyên nghiệp thông qua MCHud.</Text>
+                <AppText variant="h3" weight="bold" style={styles.cardTitle}>Giới thiệu</AppText>
+                <AppText variant="body" color={COLORS.textMuted} style={styles.cardContent}>Khám phá các MC tài năng và đặt lịch chuyên nghiệp thông qua MCHud.</AppText>
             </View>
 
-            <TouchableOpacity
+            <AppButton 
+                title="Đăng Nhập / Đăng Ký" 
+                onPress={() => navigation.navigate('Login')} 
                 style={styles.actionButton}
-                onPress={() => navigation.navigate('Login')}
-            >
-                <Text style={styles.buttonText}>Đăng Nhập / Đăng Ký</Text>
-            </TouchableOpacity>
+            />
         </ScrollView>
     );
 }
@@ -25,49 +27,30 @@ export default function PublicLandingScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#121212',
-        padding: 24,
+        backgroundColor: COLORS.background,
+        padding: SPACING.l,
     },
     title: {
-        fontSize: 26,
-        color: '#ffffff',
-        fontWeight: 'bold',
-        marginBottom: 8,
+        marginBottom: SPACING.s,
     },
     subtitle: {
-        color: '#a0a0a0',
-        fontSize: 16,
-        marginBottom: 24,
+        marginBottom: SPACING.xl,
     },
     card: {
-        backgroundColor: '#1e1e1e',
-        borderRadius: 8,
-        padding: 20,
-        marginBottom: 20,
+        backgroundColor: COLORS.surface,
+        borderRadius: RADIUS.medium,
+        padding: SPACING.m,
+        marginBottom: SPACING.m,
         borderLeftWidth: 4,
-        borderLeftColor: '#000080'
+        borderLeftColor: COLORS.brand
     },
     cardTitle: {
-        color: '#ffffff',
-        fontWeight: 'bold',
-        fontSize: 18,
-        marginBottom: 8,
+        marginBottom: SPACING.s,
     },
     cardContent: {
-        color: '#888',
-        fontSize: 14,
         lineHeight: 20
     },
     actionButton: {
-        backgroundColor: '#000080',
-        borderRadius: 8,
-        padding: 16,
-        alignItems: 'center',
-        marginTop: 20,
-    },
-    buttonText: {
-        color: '#ffffff',
-        fontWeight: '600',
-        fontSize: 16
-    },
+        marginTop: SPACING.m,
+    }
 });

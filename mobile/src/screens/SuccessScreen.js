@@ -1,16 +1,21 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import AppText from '../components/AppText';
+import AppButton from '../components/AppButton';
+import { COLORS, SPACING } from '../constants/theme';
 
 export default function SuccessScreen({ navigation }) {
     return (
         <View style={styles.container}>
-            <Text style={styles.icon}>✅</Text>
-            <Text style={styles.title}>Hoàn Thành!</Text>
-            <Text style={styles.message}>Mọi thao tác đã thành công. Giao dịch đã được lưu vào hệ thống bảo vệ (Escrow) của MCHud.</Text>
+            <AppText style={styles.icon}>✅</AppText>
+            <AppText variant="h1" weight="bold" style={styles.title}>Hoàn Thành!</AppText>
+            <AppText color={COLORS.textMuted} style={styles.message}>Mọi thao tác đã thành công. Giao dịch đã được lưu vào hệ thống bảo vệ (Escrow) của MCHud.</AppText>
 
-            <TouchableOpacity style={styles.homeBtn} onPress={() => navigation.navigate('Dashboard')}>
-                <Text style={styles.homeBtnText}>Quay Về Trang Chủ</Text>
-            </TouchableOpacity>
+            <AppButton 
+                title="Quay Về Trang Chủ" 
+                onPress={() => navigation.navigate('Dashboard')} 
+                style={styles.homeBtn} 
+            />
         </View>
     );
 }
@@ -18,38 +23,24 @@ export default function SuccessScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#121212',
-        padding: 24,
+        backgroundColor: COLORS.background,
+        padding: SPACING.l,
         justifyContent: 'center',
         alignItems: 'center'
     },
     icon: {
         fontSize: 80,
-        marginBottom: 20
+        marginBottom: SPACING.m
     },
     title: {
-        fontSize: 28,
-        color: '#ffffff',
-        fontWeight: 'bold',
-        marginBottom: 10,
+        marginBottom: SPACING.s,
     },
     message: {
-        color: '#888',
         textAlign: 'center',
-        fontSize: 16,
         lineHeight: 24,
-        marginBottom: 40
+        marginBottom: SPACING.xxl
     },
     homeBtn: {
-        backgroundColor: '#000080',
-        padding: 16,
-        borderRadius: 8,
         width: '100%',
-        alignItems: 'center'
-    },
-    homeBtnText: {
-        color: '#fff',
-        fontWeight: 'bold',
-        fontSize: 16
     }
 });
